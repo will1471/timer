@@ -156,4 +156,27 @@ class TimerTest extends \PHPUnit_Framework_TestCase
         $this->assertGreaterThan(30, $this->timer->getElapsedSeconds());
     }
 
+    public function testWithValidHistory()
+    {
+        $this->timer = new Timer(array(
+            new \Will1471\Timer\State\Event('start', new \DateTime('2014-01-01 00:00:00')),
+            new \Will1471\Timer\State\Event('pause', new \DateTime('2014-01-01 00:01:00')),
+        ));
+        $this->assertEquals(60, $this->timer->getElapsedSeconds());
+    }
+
+    public function testWithInvalidHistory()
+    {
+        $this->setExpectedException(\DomainException::class, 'History is not valid.');
+        $this->timer = new Timer(array(
+            new \Will1471\Timer\State\Event('stop', new \DateTime('2014-01-01 00:00:00')),
+        ));
+    }
+
+    public function testWithBadArgument()
+    {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Expected an array of Will1471\Timer\State\Event as first argument.');
+        $this->timer = new Timer(array(new \DateTime()));
+    }
+
 }

@@ -16,13 +16,6 @@ class Timer implements \Will1471\Timer\TimerInterface
     private $events;
 
     /**
-     * The current state of the state machine.
-     *
-     * @var State\State
-     */
-    private $state;
-
-    /**
      * @var State\Machine
      */
     private $stateMachine;
@@ -31,13 +24,18 @@ class Timer implements \Will1471\Timer\TimerInterface
     /**
      * Class Construtor.
      */
-    public function __construct()
+    public function __construct(array $events = array())
     {
         $this->events = new \SplDoublyLinkedList();
-        $this->state = new State\State();
-        $this->stateMachine = new State\Machine(
-            $this->state,
 
+        foreach ($events as $event) {
+            if (! $event instanceof State\Event) {
+                throw new \InvalidArgumentException('Expected an array of ' . State\Event::class .' as first argument.');
+            }
+            $this->events->push($event);
+        }
+
+        $this->stateMachine = new State\Machine(
             /*
              * Callback invoked after a successful state change, the StateMachine
              * should not care about saving events, so this behaviour is injected.
@@ -51,6 +49,8 @@ class Timer implements \Will1471\Timer\TimerInterface
                 );
             }
         );
+
+        $this->stateMachine->initialize($this->events);
     }
 
 
