@@ -7,7 +7,7 @@ use Finite\StateMachine\StateMachine;
 
 
 /**
- * This class is responsible for the rules that the timer but follow.
+ * This class is responsible for the rules that the timer will follow.
  */
 class Machine
 {
@@ -21,7 +21,7 @@ class Machine
     /**
      * Class Constructor.
      */
-    public function __construct(\Finite\StatefulInterface $object)
+    public function __construct(\Finite\StatefulInterface $object, \Closure $onStartChangeCallback)
     {
         $this->sm = new StateMachine();
 
@@ -34,6 +34,8 @@ class Machine
         $this->sm->addTransition('pause', 'running', 'paused');
         $this->sm->addTransition('resume', 'paused', 'running');
         $this->sm->addTransition('stop', 'running', 'stopped');
+
+        $this->sm->getDispatcher()->addListener(\Finite\Event\FiniteEvents::POST_TRANSITION, $onStartChangeCallback);
 
         $this->sm->setObject($object);
         $this->sm->initialize();
