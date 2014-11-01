@@ -1,0 +1,5 @@
+nbproject
+composer.phar
+composer.lock
+cov/
+vendor/

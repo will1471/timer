@@ -1,0 +1,22 @@
+{
+    "name": "will1471/timer",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "William Redman",
+            "email": "william.redman1989@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Will1471\\Timer\\": "src/"
+        }
+    },
+    "require": {
+        "php": ">=5.5.0",
+        "yohang/finite": "~1.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "4.3.*"
+    }
+}
