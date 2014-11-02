@@ -41,7 +41,7 @@ class Timer implements \Will1471\Timer\TimerInterface
              * should not care about saving events, so this behaviour is injected.
              */
             function(\Finite\Event\TransitionEvent $event) {
-                $this->events->push(
+                $this->pushEvent(
                     new State\Event(
                         $event->getTransition()->getName(),
                         new \DateTimeImmutable('now', new \DateTimeZone('UTC'))
@@ -51,6 +51,14 @@ class Timer implements \Will1471\Timer\TimerInterface
         );
 
         $this->stateMachine->initialize($this->events);
+    }
+
+    /**
+     * @param \Will1471\Timer\State\Event $event
+     */
+    protected function pushEvent(State\Event $event)
+    {
+        $this->events[] = $event;
     }
 
 
